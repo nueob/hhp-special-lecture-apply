@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:latest
+    container_name: local-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: lecture
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 123
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker-entrypoint-initdb:/docker-entrypoint-initdb.d
+
+volumes:
+  mysql_data:
