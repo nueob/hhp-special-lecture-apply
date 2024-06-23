@@ -36,7 +36,7 @@ CREATE TABLE lecture_enrollment_request_log (
 INSERT INTO users (name)
 VALUES ('이보은'), ('이본'), ('이본본');
 
-INSERT INTO lectures (name, limit, created_at) 
+INSERT INTO lectures (name, limit_users_count, created_at) 
 VALUES ('헌우코치님의 TDD & 클린 아키텍처', 30, now()),
 ('허재코치님의 서버 구축', 30, now()),
 ('종협코치님의 대용량 트래픽 & 데이터 처리', 30, now()),
