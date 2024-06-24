@@ -15,8 +15,12 @@ export class SpecialLectureController {
   constructor(private readonly specialLectureService: SpecialLectureService) {}
 
   @Get()
-  find(): FindSpecialLectureResponseDTO {
-    return new FindSpecialLectureResponseDTO();
+  async findAllLectures(): Promise<FindSpecialLectureResponseDTO[]> {
+    const specialLectureList =
+      await this.specialLectureService.findAllLectures();
+    return specialLectureList.map(
+      (lecture) => new FindSpecialLectureResponseDTO(lecture),
+    );
   }
 
   @Get('/application/:userId/:lectureScheduleId')

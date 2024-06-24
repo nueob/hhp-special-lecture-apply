@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { SpecialLectureRepositoryPort } from './port/SpecialLecture.repository.port';
+import { Lectures } from '../domain/Lectures.domain';
 
 @Injectable()
 export class SpecialLectureService {
@@ -7,7 +8,7 @@ export class SpecialLectureService {
     private readonly specialLectureRepositoryPort: SpecialLectureRepositoryPort,
   ) {}
 
-  getHello() {
-    return 'heelo';
+  findAllLectures(): Promise<Lectures[]> {
+    return Promise.resolve([new Lectures()]);
   }
 }
