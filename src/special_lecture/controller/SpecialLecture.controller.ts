@@ -9,6 +9,7 @@ import {
 import { SpecialLectureService } from '../service/SpecialLecture.service';
 import { FindSpecialLectureResponseDTO } from './dto/res/FindSpecialLecture.res.dto';
 import { ApplySpecialLecturesRequestDTO } from './dto/req/ApplySpecialLectures.req.dto';
+import { ApplySpecialLectureResponseDTO } from './dto/res/ApplySpecialLecture.res.dto';
 
 @Controller('/lectures')
 export class SpecialLectureController {
@@ -38,10 +39,15 @@ export class SpecialLectureController {
   }
 
   @Post('/apply')
-  apply(
+  async apply(
     @Body(ValidationPipe)
     applySpecialLectureRequestDTO: ApplySpecialLecturesRequestDTO,
-  ): boolean {
-    return true;
+  ): Promise<ApplySpecialLectureResponseDTO> {
+    return new ApplySpecialLectureResponseDTO(
+      await this.specialLectureService.applySpecialLecture(
+        applySpecialLectureRequestDTO.userId,
+        applySpecialLectureRequestDTO.lectureScheduleId,
+      ),
+    );
   }
 }

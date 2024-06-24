@@ -3,7 +3,8 @@ import { SpecialLectureController } from '../../../controller/SpecialLecture.con
 import { Lectures } from '../../../domain/Lectures.domain';
 import { LectureSchedules } from '../../../domain/LectureSchedules.domain';
 import { FindSpecialLectureResponseDTO } from '../../../controller/dto/res/FindSpecialLecture.res.dto';
-import { SpecialLectureRepositoryPort } from 'src/special_lecture/service/port/SpecialLecture.repository.port';
+import { SpecialLectureRepositoryPort } from '../../../service/port/SpecialLecture.repository.port';
+import { ApplySpecialLectureResponseDTO } from '../../../controller/dto/res/ApplySpecialLecture.res.dto';
 
 describe('SpecialLectureController', () => {
   let specialLectureController: SpecialLectureController;
@@ -102,6 +103,39 @@ describe('SpecialLectureController', () => {
       );
       //then
       expect(response).toBeFalsy();
+    });
+  });
+
+  describe('/apply (POST): 특강 신청', () => {
+    test('정상 요청, 신청이 완료 되었을 경우 신청 완료 메세지를 반환 받습니다.', async () => {
+      //given
+      const userId = 1;
+      const lectureScheduleId = 1;
+      specialLectureService.applySpecialLecture = jest.fn(() =>
+        Promise.resolve(true),
+      );
+      //when
+      const response = await specialLectureController.apply({
+        userId,
+        lectureScheduleId,
+      });
+      //then
+      expect(response).toStrictEqual(new ApplySpecialLectureResponseDTO(true));
+    });
+    test('정상 요청, 신청이 실패 되었을 경우 신청 실패 메세지를 반환 받습니다.', async () => {
+      //given
+      const userId = 1;
+      const lectureScheduleId = 1;
+      specialLectureService.applySpecialLecture = jest.fn(() =>
+        Promise.resolve(false),
+      );
+      //when
+      const response = await specialLectureController.apply({
+        userId,
+        lectureScheduleId,
+      });
+      //then
+      expect(response).toStrictEqual(new ApplySpecialLectureResponseDTO(false));
     });
   });
 });

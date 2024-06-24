@@ -18,4 +18,11 @@ export class SpecialLectureService {
   ): Promise<boolean> {
     return Promise.resolve(true);
   }
+
+  applySpecialLecture(
+    userId: number,
+    lectureScheduleId: number,
+  ): Promise<boolean> {
+    return Promise.resolve(true);
+  }
 }
