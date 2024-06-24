@@ -1,8 +1,3 @@
-CREATE TABLE users (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(45)
-);
-
 CREATE TABLE lectures (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255),
@@ -32,9 +27,6 @@ CREATE TABLE lecture_enrollment_request_log (
   is_success INT,
   created_at TIMESTAMP
 );
-
-INSERT INTO users (name)
-VALUES ('이보은'), ('이본'), ('이본본');
 
 INSERT INTO lectures (name, limit_users_count, created_at) 
 VALUES ('헌우코치님의 TDD & 클린 아키텍처', 30, now()),
