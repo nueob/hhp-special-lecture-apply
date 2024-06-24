@@ -11,4 +11,11 @@ export class SpecialLectureService {
   findAllLectures(): Promise<Lectures[]> {
     return Promise.resolve([new Lectures()]);
   }
+
+  isEnrollmentSuccessful(
+    userId: number,
+    lectureScheduleId: number,
+  ): Promise<boolean> {
+    return Promise.resolve(true);
+  }
 }

@@ -71,4 +71,37 @@ describe('SpecialLectureController', () => {
       ]);
     });
   });
+
+  describe('/lectures/application/:userId: 특강 신청 완료 여부 조회', () => {
+    test('정상 요청, 특강 신청 완료했을 경우 true를 반환합니다.', async () => {
+      //given
+      const userId = 1;
+      const LectureScheduleId = 1;
+      specialLectureService.isEnrollmentSuccessful = jest.fn(() =>
+        Promise.resolve(true),
+      );
+      //when
+      const response = await specialLectureController.findUserApplication(
+        userId,
+        LectureScheduleId,
+      );
+      //then
+      expect(response).toBeTruthy();
+    });
+    test('정상 요청, 특강 신청 실패했을 경우 false를 반환합니다.', async () => {
+      //given
+      const userId = 1;
+      const LectureScheduleId = 1;
+      specialLectureService.isEnrollmentSuccessful = jest.fn(() =>
+        Promise.resolve(false),
+      );
+      //when
+      const response = await specialLectureController.findUserApplication(
+        userId,
+        LectureScheduleId,
+      );
+      //then
+      expect(response).toBeFalsy();
+    });
+  });
 });

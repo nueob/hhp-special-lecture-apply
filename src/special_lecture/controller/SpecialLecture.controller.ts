@@ -24,11 +24,17 @@ export class SpecialLectureController {
   }
 
   @Get('/application/:userId/:lectureScheduleId')
-  findUserApplication(
+  async findUserApplication(
     @Param('userId') userId: number,
     @Param('lectureScheduleId') lectureScheduleId: number,
-  ): boolean {
-    return true;
+  ): Promise<boolean> {
+    const isEnrollmentSuccessful =
+      await this.specialLectureService.isEnrollmentSuccessful(
+        userId,
+        lectureScheduleId,
+      );
+
+    return isEnrollmentSuccessful;
   }
 
   @Post('/apply')
