@@ -18,6 +18,14 @@ export class LectureSchedules {
     this._userList = userList;
   }
 
+  public hasUser(userId: number): boolean {
+    return this._userList.some((user) => user.userId === userId);
+  }
+
+  public isLectureStarted(): boolean {
+    return this._startAt < new Date();
+  }
+
   get id(): number {
     return this._id;
   }
