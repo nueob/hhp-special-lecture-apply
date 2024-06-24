@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  ValidationPipe,
+} from '@nestjs/common';
 import { SpecialLectureService } from '../service/SpecialLecture.service';
 import { FindSpecialLectureResponseDTO } from './dto/res/FindSpecialLecture.res.dto';
 import { ApplySpecialLecturesRequestDTO } from './dto/req/ApplySpecialLectures.req.dto';
@@ -10,6 +17,14 @@ export class SpecialLectureController {
   @Get()
   find(): FindSpecialLectureResponseDTO {
     return new FindSpecialLectureResponseDTO();
+  }
+
+  @Get('/application/:userId/:lectureScheduleId')
+  findUserApplication(
+    @Param('userId') userId: number,
+    @Param('lectureScheduleId') lectureScheduleId: number,
+  ): boolean {
+    return true;
   }
 
   @Post('/apply')

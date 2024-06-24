@@ -105,4 +105,18 @@ describe('SpecialLectureController (e2e)', () => {
       expect(response.status).toBe(400);
     });
   });
+
+  describe('/lectures/application/{userId}/{lectureScheduleId}: 특강 신청 완료 여부 조회', () => {
+    test('정상 요청', async () => {
+      //given
+      const userId = 1;
+      const lectureScheduleId = 1;
+      //when
+      const response = await request(app.getHttpServer()).get(
+        `/lectures/application/${userId}/${lectureScheduleId}`,
+      );
+      //then
+      expect(response.status).toBe(200);
+    });
+  });
 });
