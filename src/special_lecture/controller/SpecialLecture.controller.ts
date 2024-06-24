@@ -1,12 +1,13 @@
 import { Controller, Get } from '@nestjs/common';
 import { SpecialLectureService } from '../service/SpecialLecture.service';
+import { FindSpecialLectureResponseDTO } from './dto/res/FindSpecialLecture.res.dto';
 
-@Controller('/lecture')
+@Controller('/lectures')
 export class SpecialLectureController {
   constructor(private readonly specialLectureService: SpecialLectureService) {}
 
   @Get()
-  getHello(): string {
-    return this.specialLectureService.getHello();
+  find(): FindSpecialLectureResponseDTO {
+    return new FindSpecialLectureResponseDTO();
   }
 }
