@@ -104,4 +104,37 @@ describe('PointServiceImpl', () => {
       expect(response).toStrictEqual(lectures);
     });
   });
+
+  describe('isEnrollmentSuccessful: 수강 신청 완료 여부 조회', () => {
+    afterAll(async () => {
+      await lectureScheduleUsersRepository.clear();
+    });
+
+    test('수강신청이 완료되었을 경우 true를 반환한다.', async () => {
+      //given
+      const userId = 1;
+      const lectureSchduleUsersEntity = new LectureScheduleUsersEntity();
+      lectureSchduleUsersEntity.id = 1;
+      lectureSchduleUsersEntity.lectureSchedulesId = 1;
+      lectureSchduleUsersEntity.userId = userId;
+      lectureSchduleUsersEntity.createdAt = new Date();
+
+      await lectureScheduleUsersRepository.insert(lectureSchduleUsersEntity);
+      //when
+      const response =
+        await specialLectureService.isEnrollmentSuccessful(userId);
+      //then
+      expect(response).toBeTruthy();
+    });
+
+    test('수강신청이 된 특강이 없을 경우 false를 반환한다.', async () => {
+      //given
+      const userId = 1;
+      //when
+      const response =
+        await specialLectureService.isEnrollmentSuccessful(userId);
+      //then
+      expect(response).toBeFalsy();
+    });
+  });
 });
