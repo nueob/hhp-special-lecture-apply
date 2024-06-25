@@ -1,6 +1,6 @@
-import { LectureEnrollmentRequestLog } from 'src/special_lecture/domain/LectureEnrollmentRequestLog.domain';
-import { LectureScheduleUsers } from 'src/special_lecture/domain/LectureScheduleUsers.domain';
-import { Lectures } from 'src/special_lecture/domain/Lectures.domain';
+import { LectureEnrollmentRequestLog } from '../../../special_lecture/domain/LectureEnrollmentRequestLog.domain';
+import { LectureScheduleUsers } from '../../../special_lecture/domain/LectureScheduleUsers.domain';
+import { Lectures } from '../../../special_lecture/domain/Lectures.domain';
 
 export abstract class SpecialLectureRepositoryPort {
   abstract applyLecture(

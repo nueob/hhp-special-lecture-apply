@@ -58,6 +58,8 @@ export class SpecialLectureMapper {
   }
 
   static mapToLecturesDomain(entity: LecturesEntity): Lectures {
+    if (!entity) return null;
+
     return new Lectures(
       entity.id,
       entity.name,
