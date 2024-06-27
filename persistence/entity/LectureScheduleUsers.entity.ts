@@ -4,10 +4,12 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import { LectureSchedulesEntity } from './LectureSchedules.entity';
 
 @Entity('lecture_schedule_users', { schema: 'lecture' })
+@Unique(['userId', 'lectureSchedulesId'])
 export class LectureScheduleUsersEntity {
   @PrimaryGeneratedColumn()
   id: number;
