@@ -4,14 +4,14 @@ import { SpecialLectureRepositoryPort } from '../../../service/port/SpecialLectu
 import { LectureSchedules } from '../../../domain/LectureSchedules.domain';
 import { StubSpecialLectureRepository } from './stub/StubSpecialLecture.repository.stub';
 import { SpecialLectureErrorCodeEnum } from '../../../enum/SpecialLectureErrorCode.enum';
-import { LockService } from '../../../service/lock/Lock.service';
+// import { LockService } from '../../../service/lock/Lock.service';
 import { DataSource } from 'typeorm';
 import { InternalServerErrorException } from '@nestjs/common';
 
 describe('SpecialLectureService', () => {
   let specialLectureService: SpecialLectureService;
   let specialLectureRepositoryPort: SpecialLectureRepositoryPort;
-  let lockService: LockService;
+  // let lockService: LockService;
   let dataSource: DataSource;
 
   describe('findAll: 모든 특강 목록을 반환합니다.', () => {
@@ -61,7 +61,7 @@ describe('SpecialLectureService', () => {
       );
       specialLectureService = new SpecialLectureService(
         specialLectureRepositoryPort,
-        lockService,
+        // lockService,
       );
       //when
       const response = await specialLectureService.findAllLectures();
@@ -81,7 +81,7 @@ describe('SpecialLectureService', () => {
       );
       specialLectureService = new SpecialLectureService(
         specialLectureRepositoryPort,
-        lockService,
+        // lockService,
       );
       //when
       const response = await specialLectureService.isEnrollmentSuccessful(
@@ -101,7 +101,7 @@ describe('SpecialLectureService', () => {
       );
       specialLectureService = new SpecialLectureService(
         specialLectureRepositoryPort,
-        lockService,
+        // lockService,
       );
       //when
       const response = await specialLectureService.isEnrollmentSuccessful(
@@ -168,13 +168,13 @@ describe('SpecialLectureService', () => {
       specialLectureRepositoryPort.applyLecture = jest.fn();
       specialLectureRepositoryPort.createHistory = jest.fn();
 
-      lockService = new LockService(dataSource);
-      lockService.acquireLock = jest.fn(() => Promise.resolve(true));
-      lockService.releaseLock = jest.fn();
+      // lockService = new LockService(dataSource);
+      // lockService.acquireLock = jest.fn(() => Promise.resolve(true));
+      // lockService.releaseLock = jest.fn();
 
       specialLectureService = new SpecialLectureService(
         specialLectureRepositoryPort,
-        lockService,
+        // lockService,
       );
       //when
       const response = await specialLectureService.applySpecialLecture(
@@ -198,7 +198,7 @@ describe('SpecialLectureService', () => {
 
       specialLectureService = new SpecialLectureService(
         specialLectureRepositoryPort,
-        lockService,
+        // lockService,
       );
       //when
       //then
@@ -259,7 +259,7 @@ describe('SpecialLectureService', () => {
 
       specialLectureService = new SpecialLectureService(
         specialLectureRepositoryPort,
-        lockService,
+        // lockService,
       );
       //when
       //then
@@ -324,7 +324,7 @@ describe('SpecialLectureService', () => {
 
       specialLectureService = new SpecialLectureService(
         specialLectureRepositoryPort,
-        lockService,
+        // lockService,
       );
       //when
       //then
@@ -391,7 +391,7 @@ describe('SpecialLectureService', () => {
 
       specialLectureService = new SpecialLectureService(
         specialLectureRepositoryPort,
-        lockService,
+        // lockService,
       );
       //when
       //then
@@ -404,73 +404,73 @@ describe('SpecialLectureService', () => {
       );
       expect(specialLectureRepositoryPort.createHistory).toHaveBeenCalled();
     });
-    test('lock을 획득하지 못할 경우 error', async () => {
-      //given
-      const userId = 1;
-      const lectureScheduleId = 1;
+    // test('lock을 획득하지 못할 경우 error', async () => {
+    //   //given
+    //   const userId = 1;
+    //   const lectureScheduleId = 1;
 
-      const mockLecture = {
-        id: 1,
-        name: '가짜 특강',
-        limitUsersCount: 20,
-        createdAt: new Date(),
-        scheduleList: [
-          {
-            id: lectureScheduleId,
-            startAt: new Date('2024-06-24 13:00:00'),
-            createdAt: new Date(),
-          },
-          {
-            id: 2,
-            startAt: new Date('2025-06-24 13:00:00'),
-            createdAt: new Date(),
-          },
-          {
-            id: 3,
-            startAt: new Date('2026-06-24 13:00:00'),
-            createdAt: new Date(),
-          },
-        ],
-      };
-      const mockLectureDomain = new Lectures(
-        mockLecture.id,
-        mockLecture.name,
-        mockLecture.limitUsersCount,
-        mockLecture.createdAt,
-        mockLecture.scheduleList.map(
-          (schedule) =>
-            new LectureSchedules(
-              schedule.id,
-              schedule.startAt,
-              schedule.createdAt,
-              null,
-            ),
-        ),
-      );
-      mockLectureDomain.isEnrollmentUser = jest.fn(() => false);
-      mockLectureDomain.isLectureStarted = jest.fn(() => false);
-      mockLectureDomain.isCapacityFull = jest.fn(() => false);
+    //   const mockLecture = {
+    //     id: 1,
+    //     name: '가짜 특강',
+    //     limitUsersCount: 20,
+    //     createdAt: new Date(),
+    //     scheduleList: [
+    //       {
+    //         id: lectureScheduleId,
+    //         startAt: new Date('2024-06-24 13:00:00'),
+    //         createdAt: new Date(),
+    //       },
+    //       {
+    //         id: 2,
+    //         startAt: new Date('2025-06-24 13:00:00'),
+    //         createdAt: new Date(),
+    //       },
+    //       {
+    //         id: 3,
+    //         startAt: new Date('2026-06-24 13:00:00'),
+    //         createdAt: new Date(),
+    //       },
+    //     ],
+    //   };
+    //   const mockLectureDomain = new Lectures(
+    //     mockLecture.id,
+    //     mockLecture.name,
+    //     mockLecture.limitUsersCount,
+    //     mockLecture.createdAt,
+    //     mockLecture.scheduleList.map(
+    //       (schedule) =>
+    //         new LectureSchedules(
+    //           schedule.id,
+    //           schedule.startAt,
+    //           schedule.createdAt,
+    //           null,
+    //         ),
+    //     ),
+    //   );
+    //   mockLectureDomain.isEnrollmentUser = jest.fn(() => false);
+    //   mockLectureDomain.isLectureStarted = jest.fn(() => false);
+    //   mockLectureDomain.isCapacityFull = jest.fn(() => false);
 
-      specialLectureRepositoryPort = new StubSpecialLectureRepository(
-        mockLectureDomain,
-        null,
-      );
-      specialLectureRepositoryPort.applyLecture = jest.fn();
-      specialLectureRepositoryPort.createHistory = jest.fn();
+    //   specialLectureRepositoryPort = new StubSpecialLectureRepository(
+    //     mockLectureDomain,
+    //     null,
+    //   );
+    //   specialLectureRepositoryPort.applyLecture = jest.fn();
+    //   specialLectureRepositoryPort.createHistory = jest.fn();
 
-      lockService = new LockService(dataSource);
-      lockService.acquireLock = jest.fn(() => Promise.resolve(false));
-      lockService.releaseLock = jest.fn();
+    //   // lockService = new LockService(dataSource);
+    //   // lockService.acquireLock = jest.fn(() => Promise.resolve(false));
+    //   // lockService.releaseLock = jest.fn();
 
-      specialLectureService = new SpecialLectureService(
-        specialLectureRepositoryPort,
-        lockService,
-      );
-      //when
-      //then
-      await expect(
-        specialLectureService.applySpecialLecture(userId, lectureScheduleId),
-      ).rejects.toThrow(new InternalServerErrorException());
-    });
+    //   specialLectureService = new SpecialLectureService(
+    //     specialLectureRepositoryPort,
+    //     // lockService,
+    //   );
+    //   //when
+    //   //then
+    //   await expect(
+    //     specialLectureService.applySpecialLecture(userId, lectureScheduleId),
+    //   ).rejects.toThrow(new InternalServerErrorException());
+    // });
   });
 });

@@ -5,18 +5,18 @@ import { LectureSchedules } from '../../../domain/LectureSchedules.domain';
 import { FindSpecialLectureResponseDTO } from '../../../controller/dto/res/FindSpecialLecture.res.dto';
 import { SpecialLectureRepositoryPort } from '../../../service/port/SpecialLecture.repository.port';
 import { ApplySpecialLectureResponseDTO } from '../../../controller/dto/res/ApplySpecialLecture.res.dto';
-import { LockService } from '../../../service/lock/Lock.service';
+// import { LockService } from '../../../service/lock/Lock.service';
 
 describe('SpecialLectureController', () => {
   let specialLectureController: SpecialLectureController;
   let specialLectureService: SpecialLectureService;
   let specialLectureRepositoryPort: SpecialLectureRepositoryPort;
-  let lockService: LockService;
+  // let lockService: LockService;
 
   beforeEach(async () => {
     specialLectureService = new SpecialLectureService(
       specialLectureRepositoryPort,
-      lockService,
+      // lockService,
     );
     specialLectureController = new SpecialLectureController(
       specialLectureService,

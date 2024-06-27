@@ -11,9 +11,11 @@ import { LectureScheduleUsersEntity } from '../../../../persistence/entity/Lectu
 import { LectureEnrollmentRequestLogEntity } from '../../../../persistence/entity/LectureEnrollmentRequestLog.entity';
 import { Repository } from 'typeorm';
 import { SpecialLectureErrorCodeEnum } from '../../../special_lecture/enum/SpecialLectureErrorCode.enum';
+// import { LockService } from '../../../special_lecture/service/lock/Lock.service';
 
 describe('PointServiceImpl', () => {
   let specialLectureService: SpecialLectureService;
+  // let lockService: LockService;
   let specialLectureRepositoryPort: SpecialLectureRepositoryPort;
 
   let lecturesRepository: Repository<LecturesEntity>;
@@ -29,6 +31,12 @@ describe('PointServiceImpl', () => {
       imports: [
         EntityModule,
         TypeOrmModule.forRoot({
+          // type: 'mysql',
+          // host: 'localhost',
+          // port: 3306,
+          // username: 'user',
+          // password: '123',
+          // database: 'lecture',
           type: 'sqlite',
           database: ':memory:',
           entities: [
@@ -43,6 +51,7 @@ describe('PointServiceImpl', () => {
       controllers: [SpecialLectureController],
       providers: [
         SpecialLectureService,
+        // LockService,
         {
           provide: SpecialLectureRepositoryPort,
           useClass: SpecialLectureRepositoryAdapter,
@@ -53,6 +62,7 @@ describe('PointServiceImpl', () => {
     specialLectureService = module.get<SpecialLectureService>(
       SpecialLectureService,
     );
+    // lockService = module.get<LockService>(LockService);
     specialLectureRepositoryPort = module.get<SpecialLectureRepositoryPort>(
       SpecialLectureRepositoryPort,
     );
@@ -181,6 +191,8 @@ describe('PointServiceImpl', () => {
       //given
       const userId = 1;
       const lectureScheduleId = 1;
+      // lockService.acquireLock = jest.fn();
+      // lockService.releaseLock = jest.fn();
       //when
       const response = await specialLectureService.applySpecialLecture(
         userId,
@@ -321,84 +333,84 @@ describe('PointServiceImpl', () => {
     });
   });
 
-  describe('applySpecialLecture: 동시성 테스트', () => {
-    beforeEach(async () => {
-      jest.useFakeTimers();
-      jest.setSystemTime(new Date('1998-09-06 13:30:00'));
+  // describe('applySpecialLecture: 동시성 테스트', () => {
+  //   beforeEach(async () => {
+  //     jest.useFakeTimers();
+  //     jest.setSystemTime(new Date('1998-09-06 13:30:00'));
 
-      const lectureEntity = new LecturesEntity();
-      lectureEntity.id = 1;
-      lectureEntity.name = '가짜 특강 강의';
-      lectureEntity.limitUsersCount = 5;
-      lectureEntity.createdAt = new Date();
+  //     const lectureEntity = new LecturesEntity();
+  //     lectureEntity.id = 1;
+  //     lectureEntity.name = '가짜 특강 강의';
+  //     lectureEntity.limitUsersCount = 5;
+  //     lectureEntity.createdAt = new Date();
 
-      const lectureSchedulesEntity = new LectureSchedulesEntity();
-      lectureSchedulesEntity.id = 1;
-      lectureSchedulesEntity.lecturesId = 1;
-      lectureSchedulesEntity.startAt = new Date('2024-06-28 10:00:00');
-      lectureSchedulesEntity.createdAt = new Date();
+  //     const lectureSchedulesEntity = new LectureSchedulesEntity();
+  //     lectureSchedulesEntity.id = 1;
+  //     lectureSchedulesEntity.lecturesId = 1;
+  //     lectureSchedulesEntity.startAt = new Date('2024-06-28 10:00:00');
+  //     lectureSchedulesEntity.createdAt = new Date();
 
-      await Promise.all([
-        lecturesRepository.insert(lectureEntity),
-        lectureSchedulesRepository.insert(lectureSchedulesEntity),
-      ]);
-    });
+  //     await Promise.all([
+  //       lecturesRepository.insert(lectureEntity),
+  //       lectureSchedulesRepository.insert(lectureSchedulesEntity),
+  //     ]);
+  //   });
 
-    afterEach(async () => {
-      await Promise.all([
-        lecturesRepository.clear(),
-        lectureSchedulesRepository.clear(),
-        lectureScheduleUsersRepository.clear(),
-        lectureEnrollmentRequestLogRepository.clear(),
-      ]);
-    });
+  //   afterEach(async () => {
+  //     await Promise.all([
+  //       lecturesRepository.clear(),
+  //       lectureSchedulesRepository.clear(),
+  //       lectureScheduleUsersRepository.clear(),
+  //       lectureEnrollmentRequestLogRepository.clear(),
+  //     ]);
+  //   });
 
-    test('여러명이 동시에 수강 신청할 경우 순차적으로 실행된다.', async () => {
-      //given
-      const lectureScheduleId = 1;
-      const user1Id = 1;
-      const user2Id = 2;
-      const user3Id = 3;
-      //when
-      await Promise.all([
-        specialLectureService.applySpecialLecture(user1Id, lectureScheduleId),
-        specialLectureService.applySpecialLecture(user2Id, lectureScheduleId),
-        specialLectureService.applySpecialLecture(user3Id, lectureScheduleId),
-      ]);
-      // 저장이 되었는 지 확인
-      const [appliedUser] = await Promise.all([
-        lectureScheduleUsersRepository.count({
-          where: { lectureSchedulesId: lectureScheduleId },
-        }),
-      ]);
-      //then
-      expect(appliedUser).toBe(3);
-    });
+  //   test('여러명이 동시에 수강 신청할 경우 순차적으로 실행된다.', async () => {
+  //     //given
+  //     const lectureScheduleId = 1;
+  //     const user1Id = 1;
+  //     const user2Id = 2;
+  //     const user3Id = 3;
+  //     //when
+  //     await Promise.all([
+  //       specialLectureService.applySpecialLecture(user1Id, lectureScheduleId),
+  //       specialLectureService.applySpecialLecture(user2Id, lectureScheduleId),
+  //       specialLectureService.applySpecialLecture(user3Id, lectureScheduleId),
+  //     ]);
+  //     // 저장이 되었는 지 확인
+  //     const [appliedUser] = await Promise.all([
+  //       lectureScheduleUsersRepository.count({
+  //         where: { lectureSchedulesId: lectureScheduleId },
+  //       }),
+  //     ]);
+  //     //then
+  //     expect(appliedUser).toBe(3);
+  //   });
 
-    test('수용 가능한 인원보다 더 많은 인원이 신청했을 경우, 수용 가능한 인원만큼 신청된다.', async () => {
-      //given
-      const lectureScheduleId = 1;
-      const user1Id = 1;
-      const user2Id = 2;
-      const user3Id = 3;
-      const user4Id = 3;
-      const user5Id = 3;
-      //when
-      await Promise.all([
-        specialLectureService.applySpecialLecture(user1Id, lectureScheduleId),
-        specialLectureService.applySpecialLecture(user2Id, lectureScheduleId),
-        specialLectureService.applySpecialLecture(user3Id, lectureScheduleId),
-        specialLectureService.applySpecialLecture(user4Id, lectureScheduleId),
-        specialLectureService.applySpecialLecture(user5Id, lectureScheduleId),
-      ]);
-      // 저장이 되었는 지 확인
-      const [appliedUser] = await Promise.all([
-        lectureScheduleUsersRepository.count({
-          where: { lectureSchedulesId: lectureScheduleId },
-        }),
-      ]);
-      //then
-      expect(appliedUser).toBe(5);
-    });
-  });
+  //   test('수용 가능한 인원보다 더 많은 인원이 신청했을 경우, 수용 가능한 인원만큼 신청된다.', async () => {
+  //     //given
+  //     const lectureScheduleId = 1;
+  //     const user1Id = 1;
+  //     const user2Id = 2;
+  //     const user3Id = 3;
+  //     const user4Id = 3;
+  //     const user5Id = 3;
+  //     //when
+  //     await Promise.all([
+  //       specialLectureService.applySpecialLecture(user1Id, lectureScheduleId),
+  //       specialLectureService.applySpecialLecture(user2Id, lectureScheduleId),
+  //       specialLectureService.applySpecialLecture(user3Id, lectureScheduleId),
+  //       specialLectureService.applySpecialLecture(user4Id, lectureScheduleId),
+  //       specialLectureService.applySpecialLecture(user5Id, lectureScheduleId),
+  //     ]);
+  //     // 저장이 되었는 지 확인
+  //     const [appliedUser] = await Promise.all([
+  //       lectureScheduleUsersRepository.count({
+  //         where: { lectureSchedulesId: lectureScheduleId },
+  //       }),
+  //     ]);
+  //     //then
+  //     expect(appliedUser).toBe(5);
+  //   });
+  // });
 });

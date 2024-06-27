@@ -4,13 +4,13 @@ import { Lectures } from '../domain/Lectures.domain';
 import { SpecialLectureErrorCodeEnum } from '../enum/SpecialLectureErrorCode.enum';
 import { LectureEnrollmentRequestLog } from '../domain/LectureEnrollmentRequestLog.domain';
 import { LectureScheduleUsers } from '../domain/LectureScheduleUsers.domain';
-import { LockService } from './lock/Lock.service';
+// import { LockService } from './lock/Lock.service';
 
 @Injectable()
 export class SpecialLectureService {
   constructor(
     private readonly specialLectureRepositoryPort: SpecialLectureRepositoryPort,
-    private readonly lockService: LockService,
+    // private readonly lockService: LockService,
   ) {}
 
   findAllLectures(): Promise<Lectures[]> {
@@ -89,29 +89,29 @@ export class SpecialLectureService {
       );
     }
 
-    const lock = await this.lockService.acquireLock('apply', 10);
-    if (!lock) {
-      throw new InternalServerErrorException();
-    }
+    // const lock = await this.lockService.acquireLock('apply', 10);
+    // if (!lock) {
+    //   throw new InternalServerErrorException();
+    // }
 
-    try {
-      await Promise.all([
-        this.specialLectureRepositoryPort.applyLecture(
-          new LectureScheduleUsers(null, userId, lectureScheduleId, new Date()),
+    // try {
+    await Promise.all([
+      this.specialLectureRepositoryPort.applyLecture(
+        new LectureScheduleUsers(null, userId, lectureScheduleId, new Date()),
+      ),
+      this.specialLectureRepositoryPort.createHistory(
+        new LectureEnrollmentRequestLog(
+          null,
+          userId,
+          lectureScheduleId,
+          true,
+          new Date(),
         ),
-        this.specialLectureRepositoryPort.createHistory(
-          new LectureEnrollmentRequestLog(
-            null,
-            userId,
-            lectureScheduleId,
-            true,
-            new Date(),
-          ),
-        ),
-      ]);
-    } finally {
-      await this.lockService.releaseLock('apply');
-    }
+      ),
+    ]);
+    // } finally {
+    //   await this.lockService.releaseLock('apply');
+    // }
 
     return Promise.resolve(true);
   }
