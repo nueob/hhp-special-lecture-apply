@@ -4,11 +4,13 @@ import { SpecialLectureRepositoryAdapter } from './repository/SpecialLecture.rep
 import { SpecialLectureService } from './service/SpecialLecture.service';
 import { SpecialLectureRepositoryPort } from './service/port/SpecialLecture.repository.port';
 import { EntityModule } from '../../persistence/entity/entity.module';
+import { LockService } from './service/lock/Lock.service';
 
 @Module({
   imports: [EntityModule],
   controllers: [SpecialLectureController],
   providers: [
+    LockService,
     SpecialLectureService,
     SpecialLectureRepositoryAdapter,
     {
