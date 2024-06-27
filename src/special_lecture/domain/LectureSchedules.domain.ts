@@ -6,10 +6,24 @@ export class LectureSchedules {
   private readonly _createdAt: Date;
   private readonly _userList: LectureScheduleUsers[];
 
-  constructor(id: number, startAt: Date, createdAt: Date) {
+  constructor(
+    id: number,
+    startAt: Date,
+    createdAt: Date,
+    userList: LectureScheduleUsers[],
+  ) {
     this._id = id;
     this._startAt = startAt;
     this._createdAt = createdAt;
+    this._userList = userList;
+  }
+
+  public hasUser(userId: number): boolean {
+    return this._userList.some((user) => user.userId === userId);
+  }
+
+  public isLectureStarted(): boolean {
+    return this._startAt < new Date();
   }
 
   get id(): number {
@@ -22,5 +36,9 @@ export class LectureSchedules {
 
   get createdAt(): Date {
     return this._createdAt;
+  }
+
+  get userList(): LectureScheduleUsers[] {
+    return this._userList;
   }
 }

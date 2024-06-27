@@ -15,6 +15,8 @@ export class LectureSchedulesEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column('int', { name: 'lectures_id' }) lecturesId: number;
+
   @Column('datetime', { name: 'start_at' }) startAt: Date;
 
   @Column('datetime', { name: 'created_at' }) createdAt: Date;

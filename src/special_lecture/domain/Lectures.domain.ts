@@ -21,6 +21,20 @@ export class Lectures {
     this._scheduleList = scheduleList;
   }
 
+  public isEnrollmentUser(userId: number): boolean {
+    return this.scheduleList.some((schedule) => schedule.hasUser(userId));
+  }
+
+  public isLectureStarted(lectureScheduleId: number): boolean {
+    return this._scheduleList
+      .find(({ id }) => id === lectureScheduleId)
+      .isLectureStarted();
+  }
+
+  public isCapacityFull(): boolean {
+    return this._limitUsersCount === this._scheduleList.length;
+  }
+
   get id(): number {
     return this._id;
   }
